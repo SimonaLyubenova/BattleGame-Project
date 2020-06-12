@@ -12,6 +12,7 @@ class Champions
 private:
 	unsigned long number;
 	std::string name;
+	int startHealth;
 	int health;
 	std::string spell;
 	Category category;
@@ -23,30 +24,41 @@ private:
 
 	void setLocation(const Point2D*);
 	Point2D* getLocation() const;
+	bool hasLocation() const;
 
 	void setWeapon(const Weapons*);
 	Weapons* getWeapon() const;
-
-	bool hasLocation() const;
-	bool hasWeapon() const;
-
-	void shoot();
-	int getDamageTo(Champions&);
-
 	bool isWeaponShooter() const;
-	Refill* getWeaponRefill() const;
 	bool areBulletsInWeapon() const;
 	int getWeaponDamage() const;
 	int getWeaponStartDefense() const;
 	void setWeaponDefense(const int);
 	int getWeaponDefense() const;
 	double getWeaponRange() const;
-	void setWeaponStatus(const WeaponStatus);
-	WeaponStatus getWeaponStatus() const;
+	
+	void shoot();
+	int getDamageTo(Champions&);
 	void defenseWithWeapon(Champions&, int&);
 
-//protected:
-	
+protected:
+	void setStartHealth(const int);
+	int getStartHealth() const;
+	void setHealth(const int);
+	int getHealth() const;
+	void setSpell(const std::string);
+	std::string getSpell() const;
+	void setCategory(const Category);
+	Category getCategory() const;
+	bool isAlive() const;
+	bool isHealer() const;
+	void makeHeal(Champions&);
+	void makeWeaponBrokenTo(Champions&);
+
+	bool hasWeapon() const;
+	bool isWeaponBroken() const;
+	bool isWeaponStrong() const;
+	void setWeaponStatus(const WeaponStatus);
+	WeaponStatus getWeaponStatus() const;
 
 public:
 	Champions();
@@ -58,26 +70,15 @@ public:
 	//champion's information methods
 	void setName(const std::string);
 	std::string getName() const;
-	void setHealth(const int);
-	int getHealth() const;
-	void setSpell(const std::string);
-	std::string getSpell() const;
-	void setCategory(const Category);
-	Category getCategory() const;
-
-	//view champion's location
-	void printLocation() const;
 
 	//champion's actions
-	double getDistanceTo2D(const Champions&); //should be private
-	double getDistanceTo(const Champions&); //should be private
+	double getDistanceTo2D(const Champions&);
+	double getDistanceTo(const Champions&);
 	void moveTo(const Point2D&);
 	void moveTo(const Champions&);
 
-	//virtual Champions* clone() const;
-
 	//weapon methods
-	void takeWeapon(const Weapons&);
+	void takeWeapon(Weapons&);
 	void throwWeapon();
 	void giveWeaponTo(Champions&);
 	void rechargeWeapon();
@@ -87,4 +88,9 @@ public:
 
 	//print information for champion
 	virtual void print() const;
+
+	//view champion's location
+	void printLocation() const;
+
+	virtual Champions* clone() const = 0;
 };

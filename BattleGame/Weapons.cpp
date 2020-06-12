@@ -7,7 +7,7 @@ Weapons::Weapons()
 	setWeaponType(WeaponType::None);
 	setWeight(0.0);
 	setDamage(0);
-	setStartDefense(0.0);
+	setStartDefense(0);
 	setDefense(0);
 	setMovementSpeed(0);
 	setRange(0.0);

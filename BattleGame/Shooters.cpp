@@ -45,9 +45,38 @@ Refill* Shooters::getRefill() const
 	return this->refill;
 }
 
+void Shooters::setNumberStartBulletsOfRefill(const int newNumberStartBullets)
+{
+	getRefill()->setNumberStartBullets(newNumberStartBullets);
+}
+
+int Shooters::getNumberStartBulletsOfRefill() const
+{
+	return getRefill()->getNumberStartBullets();
+}
+
+void Shooters::setNumberCurrentBulletsOfRefill(const int newNumberCurrentBullets)
+{
+	getRefill()->setNumberCurrentBullets(newNumberCurrentBullets);
+}
+
+int Shooters::getNumberCurrentBulletsOfRefill() const
+{
+	return getRefill()->getNumberCurrentBullets();
+}
+
+bool Shooters::areBulletsInRefill() const
+{
+	if (getRefill()->getNumberCurrentBullets() > 0)
+	{
+		return true;
+	}
+	return false;
+}
+
 void Shooters::print() const
 {
 	Weapons::print();
-	std::cout << "Bullets: " << getRefill()->getNumberBullets() << std::endl;
+	getRefill()->Refill::print();
 	Weapons::printStatus();
 }

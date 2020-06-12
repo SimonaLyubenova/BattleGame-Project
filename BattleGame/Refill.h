@@ -4,16 +4,20 @@
 class Refill
 {
 private:
+	friend class Shooters;
+	friend class Sniper;
+	friend class Gun;
 	int numberStartBullets;
-	int numberBullets;
+	int numberCurrentBullets;
+
+	void setNumberStartBullets(const int);
+	int getNumberStartBullets() const;
+	void setNumberCurrentBullets(const int);
+	int getNumberCurrentBullets() const;
+	bool hasBullets() const;
 
 public:
 	Refill(const int);
-	Refill* clone() const; //this function help us in class Shooter where we set a refill
-	void setNumberStartBullets(const int);
-	int getNumberStartBullets() const;
-	void setNumberBullets(const int);
-	int getNumberBullets() const;
-	bool hasBullets() const;
+	Refill* clone() const;
 	void print() const;
 };

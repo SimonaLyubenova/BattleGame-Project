@@ -7,12 +7,12 @@ Point3D::Point3D() :Point2D()
 	setZ(0.0);
 }
 
-Point3D::Point3D(const double newX, const double newY, const double newZ) : Point2D(newX, newY)
+Point3D::Point3D(const double newX, const double newY, const double newZ) :Point2D(newX, newY)
 {
 	setZ(newZ);
 }
 
-Point3D::Point3D(const Point3D& newPoint3D):Point2D(newPoint3D)
+Point3D::Point3D(const Point3D& newPoint3D) :Point2D(newPoint3D)
 {
 	setZ(newPoint3D.getZ());
 }
@@ -44,12 +44,12 @@ double Point3D::getZ() const
 
 double Point3D::getDistanceTo(const Point2D& otherPoint) const
 {
-	//check if argument is Point2D or Point3D
+	//check if otherPoint is Point2D or Point3D
 	try
 	{
 		auto castedPoint3D = dynamic_cast<const Point3D&>(otherPoint); //try to cast to Point3D
 		double distanceIn2D = Point2D::getDistanceTo(otherPoint); //here are used only x and y coordinates
-		double differenceZ = getZ() - otherPoint.getZ();
+		double differenceZ = getZ() - castedPoint3D.getZ();
 
 		double distance = sqrt(distanceIn2D * distanceIn2D + differenceZ * differenceZ);
 

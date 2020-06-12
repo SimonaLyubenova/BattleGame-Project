@@ -1,8 +1,6 @@
 ﻿#include <iostream>
 #include "Point2D.h"
 #include "Point3D.h"
-//#include "Weapons.h"
-//#include "Shooters.h"
 #include "Sword.h"
 #include "Sniper.h"
 #include "Gun.h"
@@ -141,38 +139,34 @@ int main()
     Point2D third(1, 1);
 
     Human h("Hiii", third);
-    Gun gun;
+    Healer w("Snake", two);
+    Healer healer("Mine", one);
+
+    healer.print();
+    cout << endl;
+    
+    Sniper gun;
+    //gun.setStatus(Broken);
     h.takeWeapon(gun);
+    //w.breakWeaponTo(h);
     h.printWeaponInformation();
 
-    Wizard w("Snake", two);
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 3; i++)
     {
         w.attack(h);
-        cout << endl;
-        w.print();
-        cout << endl;
-        h.print();
-        cout << endl;
-        h.printWeaponInformation();
     }
-    
-    h.giveWeaponTo(w);
+    cout << endl;
+    h.repairWeapon();
+    h.printWeaponInformation();
     cout << endl;
     h.print();
     cout << endl;
+    //healer.heal(w);
+    h.attack(w);
     w.print();
     cout << endl;
+    h.rechargeWeapon();
     h.printWeaponInformation();
-    cout << endl;
-    w.printWeaponInformation();
-    w.repairWeapon();
-    cout << endl;
-    h.printWeaponInformation();
-    cout << endl;
-    w.printWeaponInformation();
-
-    
     //.attack(a);
     //cout << endl;
     //a.print();

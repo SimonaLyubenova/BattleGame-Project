@@ -11,8 +11,8 @@ private:
 	void setY(const double);
 	double getY() const;
 
-//protected:
-	
+protected:
+	virtual double getZ() const;
 
 public:
 	Point2D();
@@ -21,8 +21,6 @@ public:
 	Point2D& operator=(const Point2D&);
 
 	virtual Point2D* clone() const;
-	
-	virtual double getZ() const;
 
 	virtual double getDistanceTo(const Point2D&) const;
 	virtual void print() const;

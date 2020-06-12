@@ -6,7 +6,8 @@ Champions::Champions()
 	setLocation(nullptr);
 	setName("Unknown character");
 	setCategory(Category::Humans);
-	setHealth(500);
+	setStartHealth(500);
+	setHealth(getStartHealth());
 	setSpell("None");
 	setWeapon(nullptr);
 	countChampoins++;
@@ -18,7 +19,8 @@ Champions::Champions(const std::string newName, const Point2D& point)
 	setLocation(&point);
 	setName(newName);
 	setCategory(Category::Humans);
-	setHealth(500);
+	setStartHealth(500);
+	setHealth(getStartHealth());
 	setSpell("None");
 	setWeapon(nullptr);
 	countChampoins++;
@@ -30,6 +32,7 @@ Champions::Champions(const Champions& champion)
 	setLocation(champion.getLocation());
 	setName(champion.getName());
 	setCategory(champion.getCategory());
+	setStartHealth(champion.getStartHealth());
 	setHealth(champion.getHealth());
 	setSpell(champion.getSpell());
 	setWeapon(champion.getWeapon());
@@ -43,6 +46,7 @@ Champions& Champions::operator=(const Champions& champion)
 		setLocation(champion.getLocation());
 		setName(champion.getName());
 		setCategory(champion.getCategory());
+		setStartHealth(champion.getStartHealth());
 		setHealth(champion.getHealth());
 		setSpell(champion.getSpell());
 		setWeapon(champion.getWeapon());
@@ -92,6 +96,66 @@ bool Champions::hasLocation() const
 	return false;
 }
 
+void Champions::setWeapon(const Weapons* newWeapon)
+{
+	if (newWeapon == nullptr)
+	{
+		delete this->weapon;
+		this->weapon = nullptr;
+		return;
+	}
+	delete this->weapon;
+	this->weapon = newWeapon->clone();
+}
+
+Weapons* Champions::getWeapon() const
+{
+	return this->weapon;
+}
+
+bool Champions::isWeaponShooter() const
+{
+	if (getWeapon()->isShooter())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Champions::areBulletsInWeapon() const
+{
+	if (getWeapon()->areBulletsInRefill())
+	{
+		return true;
+	}
+	return false;
+}
+
+int Champions::getWeaponDamage() const
+{
+	return getWeapon()->getDamage();
+}
+
+int Champions::getWeaponStartDefense() const
+{
+	return getWeapon()->getStartDefense();
+}
+
+void Champions::setWeaponDefense(const int newWeaponDefense)
+{
+	getWeapon()->setDefense(newWeaponDefense);
+}
+
+int Champions::getWeaponDefense() const
+{
+	return getWeapon()->getDefense();
+}
+
+double Champions::getWeaponRange() const
+{
+	return getWeapon()->getRange();
+}
+
 void Champions::setName(const std::string newName)
 {
 	this->name = newName;
@@ -100,6 +164,16 @@ void Champions::setName(const std::string newName)
 std::string Champions::getName() const
 {
 	return this->name;
+}
+
+void Champions::setStartHealth(const int newStartHealth)
+{
+	this->startHealth = newStartHealth;
+}
+
+int Champions::getStartHealth() const
+{
+	return this->startHealth;
 }
 
 void Champions::setHealth(const int newHealth)
@@ -132,58 +206,18 @@ Category Champions::getCategory() const
 	return this->category;
 }
 
-Refill* Champions::getWeaponRefill() const
+bool Champions::isAlive() const
 {
-	return getWeapon()->getRefill();
-}
-
-int Champions::getWeaponDamage() const
-{
-	return getWeapon()->getDamage();
-}
-
-int Champions::getWeaponStartDefense() const
-{
-	return getWeapon()->getStartDefense();
-}
-
-void Champions::setWeaponDefense(const int newWeaponDefense)
-{
-	getWeapon()->setDefense(newWeaponDefense);
-}
-
-int Champions::getWeaponDefense() const
-{
-	return getWeapon()->getDefense();
-}
-
-double Champions::getWeaponRange() const
-{
-	return getWeapon()->getRange();
-}
-
-void Champions::setWeaponStatus(const WeaponStatus status)
-{
-	getWeapon()->setStatus(status);
-}
-
-WeaponStatus Champions::getWeaponStatus() const
-{
-	return getWeapon()->getStatus();
-}
-
-bool Champions::isWeaponShooter() const
-{
-	if (getWeapon()->isShooter())
+	if (getHealth() > 0)
 	{
 		return true;
 	}
 	return false;
 }
 
-bool Champions::areBulletsInWeapon() const
+bool Champions::isHealer() const
 {
-	if (getWeaponRefill()->hasBullets())
+	if (getCategory() == Healers)
 	{
 		return true;
 	}
@@ -233,23 +267,6 @@ void Champions::moveTo(const Champions& champion)
 	}
 }
 
-void Champions::setWeapon(const Weapons* newWeapon)
-{
-	if (newWeapon == nullptr)
-	{
-		delete this->weapon;
-		this->weapon = nullptr;
-		return;
-	}
-	delete this->weapon;
-	this->weapon = newWeapon->clone();
-}
-
-Weapons* Champions::getWeapon() const
-{
-	return this->weapon;
-}
-
 bool Champions::hasWeapon() const
 {
 	if (getWeapon())
@@ -259,14 +276,45 @@ bool Champions::hasWeapon() const
 	return false;
 }
 
-void Champions::takeWeapon(const Weapons& newWeapon)
+bool Champions::isWeaponBroken() const
 {
-	setWeapon(&newWeapon);
+	if (getWeaponStatus() == Broken)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Champions::isWeaponStrong() const
+{
+	if (getWeaponStatus() == Strong)
+	{
+		return true;
+	}
+	return false;
+}
+
+void Champions::setWeaponStatus(const WeaponStatus status)
+{
+	getWeapon()->setStatus(status);
+}
+
+WeaponStatus Champions::getWeaponStatus() const
+{
+	return getWeapon()->getStatus();
+}
+
+void Champions::takeWeapon(Weapons& weapon)
+{
+	if (isAlive() && !hasWeapon())
+	{
+		setWeapon(&weapon);
+	}
 }
 
 void Champions::throwWeapon()
 {
-	if (hasWeapon())
+	if (isAlive() && hasWeapon())
 	{
 		setWeapon(nullptr);
 	}
@@ -274,7 +322,7 @@ void Champions::throwWeapon()
 
 void Champions::giveWeaponTo(Champions& champion)
 {
-	if (!champion.hasWeapon())
+	if (isAlive() && champion.isAlive() && !champion.hasWeapon())
 	{
 		champion.setWeapon(getWeapon());
 		setWeapon(nullptr);
@@ -283,20 +331,20 @@ void Champions::giveWeaponTo(Champions& champion)
 
 void Champions::rechargeWeapon()
 {
-	if (isWeaponShooter())
+	if (isAlive() && isWeaponShooter())
 	{
-		int startBullets = getWeaponRefill()->getNumberStartBullets();
-		getWeaponRefill()->setNumberBullets(startBullets);
+		int startBullets = getWeapon()->getNumberStartBulletsOfRefill();
+		getWeapon()->setNumberCurrentBulletsOfRefill(startBullets);
 	}
 }
 
 void Champions::repairWeapon()
 {
-	if (hasWeapon())
+	if (isAlive() && hasWeapon())
 	{
 		int startWeaponDefense = getWeaponStartDefense();
 		int currentWeaponDefense = getWeaponDefense();
-		if (startWeaponDefense != currentWeaponDefense)
+		if (startWeaponDefense != currentWeaponDefense || isWeaponBroken())
 		{
 			setWeaponDefense(startWeaponDefense);
 			setWeaponStatus(Strong);
@@ -306,11 +354,11 @@ void Champions::repairWeapon()
 
 void Champions::shoot()
 {
-	int currentNumberOfBullets = getWeaponRefill()->getNumberBullets(); //take number of bullets in the refill of the weapon
+	int currentNumberOfBullets = getWeapon()->getNumberCurrentBulletsOfRefill(); //take number of bullets in the refill of the weapon
 	if (currentNumberOfBullets > 0)
 	{
 		currentNumberOfBullets--;
-		getWeaponRefill()->setNumberBullets(currentNumberOfBullets);
+		getWeapon()->setNumberCurrentBulletsOfRefill(currentNumberOfBullets);
 	}
 }
 
@@ -326,7 +374,7 @@ void Champions::defenseWithWeapon(Champions& champion, int& realDamage)
 	{
 		currentEnemyWeaponDefense--;
 		champion.setWeaponDefense(currentEnemyWeaponDefense);
-		if (champion.getWeaponStatus() == Strong)
+		if (champion.isWeaponStrong())
 		{
 			champion.setWeaponStatus(Damaged);
 		}
@@ -340,11 +388,11 @@ void Champions::defenseWithWeapon(Champions& champion, int& realDamage)
 int Champions::getDamageTo(Champions& champion)
 {
 	double distance = getDistanceTo(champion);
-	int realDamage = 0;
+	int damage = 0;
 
 	if (hasWeapon())
 	{
-		if (distance <= getWeaponRange()) //if the enemy is in the range of the weapon
+		if (distance <= getWeaponRange() && !isWeaponBroken()) //if the enemy is in the range of the weapon and the weapon is not broken
 		{
 			if (isWeaponShooter() && areBulletsInWeapon())
 			{
@@ -355,10 +403,10 @@ int Champions::getDamageTo(Champions& champion)
 				return 0;
 			}
 
-			realDamage = getWeaponDamage();
+			damage = getWeaponDamage();
 			if (champion.hasWeapon()) //check if the enemy has a weapon in order to know if it has defense
 			{
-				defenseWithWeapon(champion, realDamage);
+				defenseWithWeapon(champion, damage);
 			}
 		}
 	}
@@ -366,14 +414,14 @@ int Champions::getDamageTo(Champions& champion)
 	{
 		if (distance <= 1)
 		{
-			realDamage = 15;
+			damage = 15;
 			if (champion.hasWeapon()) //check if the enemy has weapon in order to calculate the real damage + the defense of the weapon
 			{
-				defenseWithWeapon(champion, realDamage);
+				defenseWithWeapon(champion, damage);
 			}
 		}
 	}
-	return realDamage;
+	return damage;
 }
 
 void Champions::attack(Champions& champion)
@@ -382,11 +430,11 @@ void Champions::attack(Champions& champion)
 	{
 		return;
 	}
-	if (champion.getHealth() > 0 && getNumber() != champion.getNumber())
+	if (champion.isAlive() && getNumber() != champion.getNumber())
 	{
-		int realDamage = getDamageTo(champion);
+		int damage = getDamageTo(champion);
 		int currentEnemyHealth = champion.getHealth();
-		int newEnemyHealth = currentEnemyHealth - realDamage;
+		int newEnemyHealth = currentEnemyHealth - damage;
 		if (newEnemyHealth < 0)
 		{
 			newEnemyHealth = 0;
@@ -400,6 +448,47 @@ void Champions::attack(Champions& champion)
 	else
 	{
 		std::cout << "You cannot attack yourself!" << std::endl;
+	}
+}
+
+void Champions::makeHeal(Champions& champion)
+{
+	if (isHealer() && champion.isHealer() && getNumber() != champion.getNumber()) //a healer cannot heal another healer, but can heal himself
+	{
+		return;
+	}
+	if (isAlive() && champion.isAlive())
+	{
+		int startChampionHealth = champion.getStartHealth();
+		int currentChampionHealth = champion.getHealth();
+		if (startChampionHealth != currentChampionHealth)
+		{
+			int healPower = 20;
+			int newChampionHealth = currentChampionHealth + healPower;
+			if (newChampionHealth > startChampionHealth)
+			{
+				champion.setHealth(startChampionHealth);
+			}
+			else
+			{
+				champion.setHealth(newChampionHealth);
+			}
+		}
+	}
+}
+
+void Champions::makeWeaponBrokenTo(Champions& champion)
+{
+	if (getNumber() == champion.getNumber()) //nobody cannot break its own weapon
+	{
+		return;
+	}
+	if (isAlive() && champion.isAlive())
+	{
+		if (champion.hasWeapon() && !champion.isWeaponBroken())
+		{
+			champion.setWeaponStatus(Broken);
+		}
 	}
 }
 

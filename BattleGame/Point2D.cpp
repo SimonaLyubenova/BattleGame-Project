@@ -26,8 +26,6 @@ Point2D& Point2D::operator=(const Point2D& newPoint2D)
 	{
 		setX(newPoint2D.getX());
 		setY(newPoint2D.getY());
-
-		std::cout << "Operator= Base" << std::endl;
 	}
 	return *this;
 }

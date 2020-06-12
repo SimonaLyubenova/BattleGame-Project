@@ -2,7 +2,7 @@
 
 Refill::Refill(const int numberBullets)
 {
-	setNumberBullets(numberBullets);
+	setNumberCurrentBullets(numberBullets);
 	setNumberStartBullets(numberBullets);
 }
 
@@ -11,14 +11,14 @@ Refill* Refill::clone() const
 	return new Refill(*this);
 }
 
-void Refill::setNumberBullets(const int numberBullets)
+void Refill::setNumberCurrentBullets(const int numberBullets)
 {
-	this->numberBullets = numberBullets;
+	this->numberCurrentBullets = numberBullets;
 }
 
-int Refill::getNumberBullets() const
+int Refill::getNumberCurrentBullets() const
 {
-	return this->numberBullets;
+	return this->numberCurrentBullets;
 }
 
 void Refill::setNumberStartBullets(const int newStartBullets)
@@ -32,7 +32,7 @@ int Refill::getNumberStartBullets() const
 
 bool Refill::hasBullets() const
 {
-	if (getNumberBullets() > 0)
+	if (getNumberCurrentBullets() > 0)
 	{
 		return true;
 	}
@@ -41,5 +41,5 @@ bool Refill::hasBullets() const
 
 void Refill::print() const
 {
-	std::cout << "Bullets: " << getNumberBullets() << std::endl;
+	std::cout << "Bullets: " << getNumberCurrentBullets() << "/" << getNumberStartBullets() << std::endl;
 }
