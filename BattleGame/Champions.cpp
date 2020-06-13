@@ -1,12 +1,13 @@
 #include "Champions.h"
+#include <exception>
 
 Champions::Champions()
 {
-	setNumber(countChampoins + 1);
+	setChampionNumber(countChampoins + 1);
 	setLocation(nullptr);
 	setName("Unknown character");
 	setCategory(Category::Humans);
-	setStartHealth(500);
+	setStartHealth(0);
 	setHealth(getStartHealth());
 	setSpell("None");
 	setWeapon(nullptr);
@@ -15,11 +16,11 @@ Champions::Champions()
 
 Champions::Champions(const std::string newName, const Point2D& point)
 {
-	setNumber(countChampoins + 1);
+	setChampionNumber(countChampoins + 1);
 	setLocation(&point);
 	setName(newName);
 	setCategory(Category::Humans);
-	setStartHealth(500);
+	setStartHealth(0);
 	setHealth(getStartHealth());
 	setSpell("None");
 	setWeapon(nullptr);
@@ -28,7 +29,7 @@ Champions::Champions(const std::string newName, const Point2D& point)
 
 Champions::Champions(const Champions& champion)
 {
-	setNumber(countChampoins + 1);
+	setChampionNumber(countChampoins + 1);
 	setLocation(champion.getLocation());
 	setName(champion.getName());
 	setCategory(champion.getCategory());
@@ -60,14 +61,23 @@ Champions::~Champions()
 	delete this->weapon;
 }
 
-void Champions::setNumber(const unsigned long newNumber)
+void Champions::setChampionNumber(const unsigned long newChampionNumber)
 {
-	this->number = newNumber;
+	this->championNumber = newChampionNumber;
 }
 
-unsigned long Champions::getNumber() const
+unsigned long Champions::getChampionNumber() const
 {
-	return this->number;
+	return this->championNumber;
+}
+
+bool Champions::isTheSameAs(const Champions& champion) const
+{
+	if (getChampionNumber() == champion.getChampionNumber())
+	{
+		return true;
+	}
+	return false;
 }
 
 void Champions::setLocation(const Point2D* newLocation)
@@ -156,6 +166,17 @@ double Champions::getWeaponRange() const
 	return getWeapon()->getRange();
 }
 
+bool Champions::isInRangeWith(const Champions& champion, const double range)
+{
+	double distance = getDistanceTo(champion);
+
+	if (distance <= range)
+	{
+		return true;
+	}
+	return false;
+}
+
 void Champions::setName(const std::string newName)
 {
 	this->name = newName;
@@ -226,28 +247,58 @@ bool Champions::isHealer() const
 
 double Champions::getDistanceTo2D(const Champions& champion)
 {
-	if (hasLocation() && champion.hasLocation())
+	try
 	{
-		return getLocation()->Point2D::getDistanceTo(*champion.getLocation());
+		if (hasLocation() && champion.hasLocation())
+		{
+			return getLocation()->Point2D::getDistanceTo(*champion.getLocation());
+		}
+
+		if (!hasLocation())
+		{
+			throw getChampionNumber();
+		}
+		else if (!champion.hasLocation())
+		{
+			throw champion.getChampionNumber();
+		}
 	}
-	std::cout << "Number " << getNumber() << " or number " << champion.getNumber() << " doesn't have a location" << std::endl;
-	return 0.0;
+	catch (unsigned long catchedID)
+	{
+		std::cout << "Error in getting distance2D: Number " << catchedID << " doesn't have location" << std::endl;
+	}
+	return -1.0;
 }
 
 double Champions::getDistanceTo(const Champions& champion)
 {
-	if (hasLocation() && champion.hasLocation())
+	try
 	{
-		auto thisPoint = dynamic_cast<Point3D*>(getLocation());
-		auto championPoint = dynamic_cast<Point3D*>(champion.getLocation());
-
-		if (thisPoint && championPoint)
+		if (hasLocation() && champion.hasLocation())
 		{
-			return getLocation()->getDistanceTo(*champion.getLocation());
+			auto thisPoint = dynamic_cast<Point3D*>(getLocation());
+			auto championPoint = dynamic_cast<Point3D*>(champion.getLocation());
+
+			if (thisPoint && championPoint)
+			{
+				return getLocation()->getDistanceTo(*champion.getLocation());
+			}
+			return getDistanceTo2D(champion);
 		}
-		return getDistanceTo2D(champion);
+
+		if (!hasLocation())
+		{
+			throw getChampionNumber();
+		}
+		else if (!champion.hasLocation())
+		{
+			throw champion.getChampionNumber();
+		}
 	}
-	std::cout << "Number " << getNumber() << " or number " << champion.getNumber() << " doesn't have a location" << std::endl;
+	catch (unsigned long catchedID)
+	{
+		std::cout << "Error in getting distance: Number " << catchedID << " doesn't have location" << std::endl;
+	}
 	return -1.0;
 }
 
@@ -261,9 +312,20 @@ void Champions::moveTo(const Point2D& point)
 
 void Champions::moveTo(const Champions& champion)
 {
-	if (champion.hasLocation() && getLocation() != champion.getLocation())
+	try
 	{
-		setLocation(champion.getLocation());
+		if (!champion.hasLocation())
+		{
+			throw champion.getChampionNumber();
+		}
+		else if (getLocation() != champion.getLocation())
+		{
+			setLocation(champion.getLocation());
+		}
+	}
+	catch (unsigned long catchedID)
+	{
+		std::cout << "Error in moving: Number " << catchedID << "doesn't have location" << std::endl;
 	}
 }
 
@@ -306,118 +368,190 @@ WeaponStatus Champions::getWeaponStatus() const
 
 void Champions::takeWeapon(Weapons& weapon)
 {
-	if (isAlive() && !hasWeapon())
+	try
 	{
-		setWeapon(&weapon);
+		throwChampionNumberIfNotAlive(this);
+
+		if (!hasWeapon())
+		{
+			setWeapon(&weapon);
+		}
+	}
+	catch (unsigned long catchedID)
+	{
+		std::cout << "Error in taking weapon: Number " << catchedID << " is not alive" << std::endl;
 	}
 }
 
 void Champions::throwWeapon()
 {
-	if (isAlive() && hasWeapon())
+	try
 	{
-		setWeapon(nullptr);
+		throwChampionNumberIfNotAlive(this);
+
+		if (hasWeapon())
+		{
+			setWeapon(nullptr);
+		}
+
+	}
+	catch (unsigned long catchedID)
+	{
+		std::cout << "Error in throwing weapon: Number " << catchedID << " is not alive" << std::endl;
 	}
 }
 
 void Champions::giveWeaponTo(Champions& champion)
 {
-	if (isAlive() && champion.isAlive() && !champion.hasWeapon())
+	try
 	{
-		champion.setWeapon(getWeapon());
-		setWeapon(nullptr);
+		throwChampionNumberIfNotAlive(this);
+		throwChampionNumberIfNotAlive(&champion);
+
+		if (!champion.hasWeapon())
+		{
+			champion.setWeapon(getWeapon());
+			setWeapon(nullptr);
+		}
+	}
+	catch (unsigned long catchedID)
+	{
+		std::cout << "Error in giving weapon: Number " << catchedID << " is not alive" << std::endl;
 	}
 }
 
 void Champions::rechargeWeapon()
 {
-	if (isAlive() && isWeaponShooter())
+	try
 	{
-		int startBullets = getWeapon()->getNumberStartBulletsOfRefill();
-		getWeapon()->setNumberCurrentBulletsOfRefill(startBullets);
+		throwChampionNumberIfNotAlive(this);
+
+		if (isWeaponShooter())
+		{
+			int startBullets = getWeapon()->getNumberStartBulletsOfRefill();
+			getWeapon()->setNumberCurrentBulletsOfRefill(startBullets);
+		}
+	}
+	catch (unsigned long catchedID)
+	{
+		std::cout << "Error in recharging weapon: Number " << catchedID << " is not alive" << std::endl;
 	}
 }
 
 void Champions::repairWeapon()
 {
-	if (isAlive() && hasWeapon())
+	try
 	{
-		int startWeaponDefense = getWeaponStartDefense();
-		int currentWeaponDefense = getWeaponDefense();
-		if (startWeaponDefense != currentWeaponDefense || isWeaponBroken())
+		throwChampionNumberIfNotAlive(this);
+
+		if (hasWeapon())
 		{
-			setWeaponDefense(startWeaponDefense);
-			setWeaponStatus(Strong);
+			int startWeaponDefense = getWeaponStartDefense();
+			int currentWeaponDefense = getWeaponDefense();
+			if (startWeaponDefense != currentWeaponDefense || isWeaponBroken())
+			{
+				setWeaponDefense(startWeaponDefense);
+				setWeaponStatus(Strong);
+			}
 		}
+	}
+	catch (unsigned long catchedID)
+	{
+		std::cout << "Error in repairing weapon: Number " << catchedID << " is not alive" << std::endl;
 	}
 }
 
 void Champions::shoot()
 {
-	int currentNumberOfBullets = getWeapon()->getNumberCurrentBulletsOfRefill(); //take number of bullets in the refill of the weapon
-	if (currentNumberOfBullets > 0)
+	try
 	{
-		currentNumberOfBullets--;
-		getWeapon()->setNumberCurrentBulletsOfRefill(currentNumberOfBullets);
+		int currentNumberOfBullets = getWeapon()->getNumberCurrentBulletsOfRefill(); //take number of bullets in the refill of the weapon
+		if (currentNumberOfBullets > 0)
+		{
+			currentNumberOfBullets--;
+			getWeapon()->setNumberCurrentBulletsOfRefill(currentNumberOfBullets);
+		}
+		else
+		{
+			throw std::exception("No bullets left in refill");
+		}
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "Error in shooting: " << e.what() << std::endl;
 	}
 }
 
-void Champions::defenseWithWeapon(Champions& champion, int& realDamage)
+void Champions::defenseWithWeaponFrom(int& realDamage)
 {
-	realDamage = realDamage - champion.getWeaponDefense(); //calculate the real damage
-	if (realDamage <= 0)
+	realDamage = realDamage - getWeaponDefense(); //calculate the real damage
+	if (realDamage <= 0) //this happens if weapon's defense is greater than the damage
 	{
 		realDamage = 10;
 	}
-	int currentEnemyWeaponDefense = champion.getWeaponDefense();
-	if (currentEnemyWeaponDefense > 0)
+	int currentWeaponDefense = getWeaponDefense();
+	if (currentWeaponDefense > 0)
 	{
-		currentEnemyWeaponDefense--;
-		champion.setWeaponDefense(currentEnemyWeaponDefense);
-		if (champion.isWeaponStrong())
+		currentWeaponDefense--;
+		setWeaponDefense(currentWeaponDefense);
+		if (isWeaponStrong())
 		{
-			champion.setWeaponStatus(Damaged);
+			setWeaponStatus(Damaged);
 		}
-		if (currentEnemyWeaponDefense == 0)
+		if (currentWeaponDefense == 0)
 		{
-			champion.setWeaponStatus(Broken);
+			setWeaponStatus(Broken);
 		}
 	}
 }
 
 int Champions::getDamageTo(Champions& champion)
 {
-	double distance = getDistanceTo(champion);
 	int damage = 0;
 
 	if (hasWeapon())
 	{
-		if (distance <= getWeaponRange() && !isWeaponBroken()) //if the enemy is in the range of the weapon and the weapon is not broken
+		if (!isInRangeWith(champion, getWeaponRange()))
 		{
-			if (isWeaponShooter() && areBulletsInWeapon())
+			throwExceptionIfNotInRangeWith(champion, getWeaponRange());
+			return 0;
+		}
+		if (isWeaponBroken())
+		{
+			throwExceptionIfWeaponIsBroken();
+			return 0;
+		}
+		else if (isWeaponShooter())
+		{
+			if (!areBulletsInWeapon())
+			{
+				throwExceptionIfNoBulletsInWeapon();
+				return 0;
+			}
+			else
 			{
 				shoot();
 			}
-			else if(isWeaponShooter() && !areBulletsInWeapon())
-			{
-				return 0;
-			}
-
-			damage = getWeaponDamage();
-			if (champion.hasWeapon()) //check if the enemy has a weapon in order to know if it has defense
-			{
-				defenseWithWeapon(champion, damage);
-			}
+		}
+		damage = getWeaponDamage();
+		if (champion.hasWeapon())
+		{
+			champion.defenseWithWeaponFrom(damage);
 		}
 	}
 	else
 	{
-		if (distance <= 1)
+		if (!isInRangeWith(champion, 1.0))
+		{
+			throwExceptionIfNotInRangeWith(champion, 1.0);
+			return 0;
+		}
+		else
 		{
 			damage = 15;
-			if (champion.hasWeapon()) //check if the enemy has weapon in order to calculate the real damage + the defense of the weapon
+			if (champion.hasWeapon())
 			{
-				defenseWithWeapon(champion, damage);
+				champion.defenseWithWeaponFrom(damage);
 			}
 		}
 	}
@@ -426,75 +560,171 @@ int Champions::getDamageTo(Champions& champion)
 
 void Champions::attack(Champions& champion)
 {
-	if (!getLocation() || !champion.getLocation())
+	try
 	{
-		return;
-	}
-	if (champion.isAlive() && getNumber() != champion.getNumber())
-	{
-		int damage = getDamageTo(champion);
-		int currentEnemyHealth = champion.getHealth();
-		int newEnemyHealth = currentEnemyHealth - damage;
-		if (newEnemyHealth < 0)
+		if (!getLocation() || !isAlive())
 		{
-			newEnemyHealth = 0;
+			throw getChampionNumber();
 		}
-		champion.setHealth(newEnemyHealth);
+		else if (!champion.getLocation() || !champion.isAlive())
+		{
+			throw champion.getChampionNumber();
+		}
+
+		if (isTheSameAs(champion))
+		{
+			throw std::exception("You cannot attack yourself");
+		}
+		else
+		{
+			int damage = getDamageTo(champion);
+			int currentEnemyHealth = champion.getHealth();
+			int newEnemyHealth = currentEnemyHealth - damage;
+			if (newEnemyHealth < 0)
+			{
+				newEnemyHealth = 0;
+			}
+			champion.setHealth(newEnemyHealth);
+		}
 	}
-	else if (getNumber() != champion.getNumber())
+	catch (unsigned long catchedID)
 	{
-		std::cout << "You cannot attack " << champion.getNumber() << "!" << std::endl;
+		std::cout << "Error in attacking: Number " << catchedID << " doesn't have location or is not alive" << std::endl;
 	}
-	else
+	catch (std::exception& e)
 	{
-		std::cout << "You cannot attack yourself!" << std::endl;
+		std::cout << "Error in attacking: " << e.what() << std::endl;
+	}
+}
+
+void Champions::heal(Champions& champion)
+{
+	int startChampionHealth = champion.getStartHealth();
+	int currentChampionHealth = champion.getHealth();
+	if (startChampionHealth != currentChampionHealth)
+	{
+		int healPower = 20;
+		int newChampionHealth = currentChampionHealth + healPower;
+		if (newChampionHealth > startChampionHealth)
+		{
+			champion.setHealth(startChampionHealth);
+		}
+		else
+		{
+			champion.setHealth(newChampionHealth);
+		}
 	}
 }
 
 void Champions::makeHeal(Champions& champion)
 {
-	if (isHealer() && champion.isHealer() && getNumber() != champion.getNumber()) //a healer cannot heal another healer, but can heal himself
+	try
 	{
-		return;
-	}
-	if (isAlive() && champion.isAlive())
-	{
-		int startChampionHealth = champion.getStartHealth();
-		int currentChampionHealth = champion.getHealth();
-		if (startChampionHealth != currentChampionHealth)
+		throwChampionNumberIfNotAlive(this);
+		throwChampionNumberIfNotAlive(&champion);
+
+		if (isHealer() && champion.isHealer() && !isTheSameAs(champion))
 		{
-			int healPower = 20;
-			int newChampionHealth = currentChampionHealth + healPower;
-			if (newChampionHealth > startChampionHealth)
-			{
-				champion.setHealth(startChampionHealth);
-			}
-			else
-			{
-				champion.setHealth(newChampionHealth);
-			}
+			throw std::exception("You cannot heal another healer");
 		}
+		else
+		{
+			heal(champion);
+		}
+	}
+	catch (unsigned long catchedID)
+	{
+		std::cout << "Error in healing: Number " << catchedID << " is not alive" << std::endl;
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "Error in healing: " << e.what() << std::endl;
 	}
 }
 
 void Champions::makeWeaponBrokenTo(Champions& champion)
 {
-	if (getNumber() == champion.getNumber()) //nobody cannot break its own weapon
+	try
 	{
-		return;
-	}
-	if (isAlive() && champion.isAlive())
-	{
+		throwChampionNumberIfNotAlive(this);
+		throwChampionNumberIfNotAlive(&champion);
+
+		if (isTheSameAs(champion))
+		{
+			throw std::exception("You cannot break your own weapon");
+		}
+
 		if (champion.hasWeapon() && !champion.isWeaponBroken())
 		{
 			champion.setWeaponStatus(Broken);
 		}
 	}
+	catch (unsigned long catchedID)
+	{
+		std::cout << "Error in breaking weapon: Number " << catchedID << " is not alive" << std::endl;
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "Error in breaking weapon: " << e.what() << std::endl;
+	}
+}
+
+void Champions::throwChampionNumberIfNotAlive(const Champions* champion)
+{
+	if (!champion->isAlive())
+	{
+		throw champion->getChampionNumber();
+	}
+}
+
+void Champions::throwExceptionIfNotInRangeWith(const Champions& champion, const double range)
+{
+	try
+	{
+		if (!isInRangeWith(champion, range))
+		{
+			throw std::exception("Enemy is out of range");
+		}
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "Error in range: " << e.what() << std::endl;
+	}
+}
+
+void Champions::throwExceptionIfNoBulletsInWeapon()
+{
+	try
+	{
+		if (!areBulletsInWeapon())
+		{
+			throw std::exception("Weapon doesn't have bullets in refill");
+		}
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "Exception caught: " << e.what() << std::endl;
+	}
+}
+
+void Champions::throwExceptionIfWeaponIsBroken()
+{
+	try
+	{
+		if (isWeaponBroken())
+		{
+			throw std::exception("Weapon is broken");
+		}
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "Error in attack: " << e.what() << std::endl;
+	}
 }
 
 void Champions::print() const
 {
-	std::cout << "Number: " << getNumber() << std::endl;
+	std::cout << "Number: " << getChampionNumber() << std::endl;
 	std::cout << "Name: " << getName() << std::endl;
 	std::cout << "Category: ";
 	switch (getCategory())
@@ -520,12 +750,12 @@ void Champions::printLocation() const
 {
 	if (hasLocation())
 	{
-		std::cout << "Number " << getNumber() << " coordinates: " << std::endl;
+		std::cout << "Number " << getChampionNumber() << " coordinates: " << std::endl;
 		getLocation()->print();
 	}
 	else
 	{
-		std::cout << "Number " << getNumber() << " doesn't have coordinates" << std::endl;
+		std::cout << "Number " << getChampionNumber() << " doesn't have coordinates" << std::endl;
 	}
 }
 
@@ -533,11 +763,11 @@ void Champions::printWeaponInformation() const
 {
 	if (hasWeapon())
 	{
-		std::cout << "Weapon of number " << getNumber() << ":" << std::endl;
+		std::cout << "Weapon of number " << getChampionNumber() << ":" << std::endl;
 		getWeapon()->print();
 	}
 	else
 	{
-		std::cout << "Number " << getNumber() << " doesn't have a weapon" << std::endl;
+		std::cout << "Number " << getChampionNumber() << " doesn't have a weapon" << std::endl;
 	}
 }
