@@ -20,4 +20,5 @@ Sword* Sword::clone() const
 void Sword::print() const 
 {
 	Handguns::print();
+	Weapons::printStatus();
 }

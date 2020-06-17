@@ -2,8 +2,8 @@
 
 Gun::Gun() :Shooters()
 {
-	getRefill()->setNumberStartBullets(20);
-	getRefill()->setNumberCurrentBullets(getRefill()->getNumberStartBullets());
+	setNumberStartBulletsInRefill(20);
+	setNumberCurrentBulletsInRefill(getNumberStartBulletsInRefill());
 	setName("Gun");
 	setWeaponType(WeaponType::Shooter);
 	setWeight(1.75);

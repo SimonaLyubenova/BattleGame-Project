@@ -2,7 +2,7 @@
 
 Weapons::Weapons()
 {
-	setID(countWeapons + 1);
+	setWeaponID(countWeapons + 1);
 	setName("Unknown weapon");
 	setWeaponType(WeaponType::None);
 	setWeight(0.0);
@@ -17,7 +17,7 @@ Weapons::Weapons()
 
 Weapons::Weapons(const Weapons& weapon)
 {
-	setID(countWeapons + 1);
+	setWeaponID(countWeapons + 1);
 	setName(weapon.getName());
 	setWeaponType(weapon.getWeaponType());
 	setWeight(weapon.getWeight());
@@ -40,14 +40,14 @@ Weapons& Weapons::operator=(const Weapons& weapon) //we need to take only the ty
 	return *this;
 }
 
-void Weapons::setID(const unsigned long newID)
+void Weapons::setWeaponID(const unsigned long newWeaponID)
 {
-	this->id = newID;
+	this->weaponID = newWeaponID;
 }
 
-unsigned long Weapons::getID() const
+unsigned long Weapons::getWeaponID() const
 {
-	return this->id;
+	return this->weaponID;
 }
 
 void Weapons::setName(const std::string newName)
@@ -165,7 +165,7 @@ void Weapons::printStatus() const
 
 void Weapons::print() const
 {
-	std::cout << "ID: " << getID() << std::endl;
+	std::cout << "ID: " << getWeaponID() << std::endl;
 	std::cout << "Weapon: " << getName() << std::endl;
 	std::cout << "Type: ";
 	switch (getWeaponType())

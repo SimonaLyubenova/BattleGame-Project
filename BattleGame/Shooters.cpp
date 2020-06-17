@@ -3,7 +3,7 @@
 Shooters::Shooters() :Weapons()
 {
 	this->refill = new Refill(10);
-	this->refill->setNumberStartBullets(10);
+	setNumberStartBulletsInRefill(10);
 	setName("Unknown shooter");
 	setWeaponType(WeaponType::Shooter);
 }
@@ -45,29 +45,29 @@ Refill* Shooters::getRefill() const
 	return this->refill;
 }
 
-void Shooters::setNumberStartBulletsOfRefill(const int newNumberStartBullets)
+void Shooters::setNumberStartBulletsInRefill(const int newNumberStartBullets)
 {
 	getRefill()->setNumberStartBullets(newNumberStartBullets);
 }
 
-int Shooters::getNumberStartBulletsOfRefill() const
+int Shooters::getNumberStartBulletsInRefill() const
 {
 	return getRefill()->getNumberStartBullets();
 }
 
-void Shooters::setNumberCurrentBulletsOfRefill(const int newNumberCurrentBullets)
+void Shooters::setNumberCurrentBulletsInRefill(const int newNumberCurrentBullets)
 {
 	getRefill()->setNumberCurrentBullets(newNumberCurrentBullets);
 }
 
-int Shooters::getNumberCurrentBulletsOfRefill() const
+int Shooters::getNumberCurrentBulletsInRefill() const
 {
 	return getRefill()->getNumberCurrentBullets();
 }
 
 bool Shooters::areBulletsInRefill() const
 {
-	if (getRefill()->getNumberCurrentBullets() > 0)
+	if (getNumberCurrentBulletsInRefill() > 0)
 	{
 		return true;
 	}

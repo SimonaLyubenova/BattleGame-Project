@@ -24,7 +24,7 @@ Healer* Healer::clone() const
 
 void Healer::heal(Champions& champion)
 {
-	this->makeHeal(champion);
+	this->increaseHealthTo(champion);
 }
 
 void Healer::print() const

@@ -10,7 +10,7 @@ static unsigned long countChampoins = 0;
 class Champions
 {
 private:
-	unsigned long championNumber;
+	unsigned long championID;
 	std::string name;
 	int startHealth;
 	int health;
@@ -19,8 +19,8 @@ private:
 	Point2D* location = nullptr;
 	Weapons* weapon = nullptr;
 
-	void setChampionNumber(const unsigned long);
-	unsigned long getChampionNumber() const;
+	void setChampionID(const unsigned long);
+	unsigned long getChampionID() const;
 	bool isTheSameAs(const Champions&) const;
 
 	void setLocation(const Point2D*);
@@ -42,9 +42,9 @@ private:
 	int getDamageTo(Champions&);
 	void defenseWithWeaponFrom(int&);
 
-	void heal(Champions&);
+	void makeHealTo(Champions&);
 
-	void throwChampionNumberIfNotAlive(const Champions*);
+	void throwChampionIDIfNotAlive(const Champions*);
 	void throwExceptionIfNotInRangeWith(const Champions&, const double);
 	void throwExceptionIfNoBulletsInWeapon();
 	void throwExceptionIfWeaponIsBroken();
@@ -60,7 +60,7 @@ protected:
 	Category getCategory() const;
 	bool isAlive() const;
 	bool isHealer() const;
-	void makeHeal(Champions&);
+	void increaseHealthTo(Champions&);
 	void makeWeaponBrokenTo(Champions&);
 
 	bool hasWeapon() const;

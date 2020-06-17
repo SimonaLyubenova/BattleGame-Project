@@ -8,7 +8,7 @@ Stick::Stick() :Handguns()
 	setDamage(30);
 	setStartDefense(15);
 	setDefense(getStartDefense());
-	setMovementSpeed(90);
+	setMovementSpeed(500);
 	setRange(1.2);
 	setLength(1.2);
 }

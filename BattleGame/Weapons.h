@@ -11,7 +11,7 @@ class Weapons
 {
 private:
 	friend class Champions;
-	unsigned long id;
+	unsigned long weaponID;
 	std::string name;
 	double weight;
 	int damage;
@@ -21,13 +21,13 @@ private:
 	double range;
 	WeaponType type;
 	WeaponStatus status;
-	void setID(const unsigned long);
-	unsigned long getID() const;
+	void setWeaponID(const unsigned long);
+	unsigned long getWeaponID() const;
 
-	virtual void setNumberStartBulletsOfRefill(const int) = 0;
-	virtual int getNumberStartBulletsOfRefill() const = 0;
-	virtual void setNumberCurrentBulletsOfRefill(const int) = 0;
-	virtual int getNumberCurrentBulletsOfRefill() const = 0;
+	virtual void setNumberStartBulletsInRefill(const int) = 0;
+	virtual int getNumberStartBulletsInRefill() const = 0;
+	virtual void setNumberCurrentBulletsInRefill(const int) = 0;
+	virtual int getNumberCurrentBulletsInRefill() const = 0;
 	virtual bool areBulletsInRefill() const = 0;
 
 protected:
@@ -57,6 +57,6 @@ public:
 	Weapons(const Weapons&);
 	Weapons& operator=(const Weapons&);
 	virtual Weapons* clone() const = 0;
-
+	
 	virtual void print() const;
 };

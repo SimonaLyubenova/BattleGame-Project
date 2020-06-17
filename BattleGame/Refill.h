@@ -16,8 +16,9 @@ private:
 	int getNumberCurrentBullets() const;
 	bool hasBullets() const;
 
+	Refill* clone() const;
+
 public:
 	Refill(const int);
-	Refill* clone() const;
 	void print() const;
 };

@@ -11,6 +11,16 @@ Refill* Refill::clone() const
 	return new Refill(*this);
 }
 
+void Refill::setNumberStartBullets(const int newStartBullets)
+{
+	this->numberStartBullets = newStartBullets;
+}
+
+int Refill::getNumberStartBullets() const
+{
+	return this->numberStartBullets;
+}
+
 void Refill::setNumberCurrentBullets(const int numberBullets)
 {
 	this->numberCurrentBullets = numberBullets;
@@ -19,15 +29,6 @@ void Refill::setNumberCurrentBullets(const int numberBullets)
 int Refill::getNumberCurrentBullets() const
 {
 	return this->numberCurrentBullets;
-}
-
-void Refill::setNumberStartBullets(const int newStartBullets)
-{
-	this->numberStartBullets = newStartBullets;
-}
-int Refill::getNumberStartBullets() const
-{
-	return this->numberStartBullets;
 }
 
 bool Refill::hasBullets() const

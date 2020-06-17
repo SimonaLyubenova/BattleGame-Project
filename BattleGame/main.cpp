@@ -15,35 +15,36 @@ using namespace std;
 
 int main()
 {
-    Point3D one(10, 2, 5);
-    Point3D two(1, 2, 1);
-    Point2D third(1, 1);
+	Point3D point3D(5, 5, 1);
+	Point2D point2D(5, 4);
+	Gun gun;
+	Stick stick;
+	Healer healer("Ben", point2D);
+	healer.takeWeapon(gun);
+	Wizard wizard("Fred", point3D);
+	wizard.takeWeapon(stick);
 
-    Gun gun;
-    Human h("A", one);
-    //h.takeWeapon(gun);
-    Assassin a("B", third);
-    h.print();
-    cout << endl;
-    a.print();
-    cout << endl;
-    h.attack(h);
-    for (int i = 0; i < 6; i++)
-    {
-        h.attack(a);
-    }
-    for (int i = 0; i < 8; i++)
-    {
-        a.attack(h);
-    }
-    h.attack(a);
-    h.attack(a);
+	for (int i = 0; i < 5; i++)
+	{
+		healer.attack(wizard);
+	}
 
-    h.print();
-    cout << endl;
-    a.print();
-    cout << endl;
-    h.printWeaponInformation();
+	wizard.attack(healer);
+
+	wizard.print();
+	cout << endl;
+	healer.printWeaponInformation();
+
+	cout << endl << endl;
+	wizard.throwWeapon();
+	healer.giveWeaponTo(wizard);
+	wizard.print();
+	cout << endl;
+	healer.print();
+	cout << endl;
+	wizard.printWeaponInformation();
+	cout << endl;
+	healer.printWeaponInformation();
 
     return 0;
 }

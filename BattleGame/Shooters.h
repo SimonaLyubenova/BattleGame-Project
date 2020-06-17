@@ -8,10 +8,14 @@ class Shooters :public Weapons
 private:
 	Refill* refill = nullptr;
 
-	virtual void setNumberStartBulletsOfRefill(const int);
-	virtual int getNumberStartBulletsOfRefill() const;
-	virtual void setNumberCurrentBulletsOfRefill(const int);
-	virtual int getNumberCurrentBulletsOfRefill() const;
+	void setRefill(const Refill*);
+	Refill* getRefill() const;
+
+protected:
+	virtual void setNumberStartBulletsInRefill(const int);
+	virtual int getNumberStartBulletsInRefill() const;
+	virtual void setNumberCurrentBulletsInRefill(const int);
+	virtual int getNumberCurrentBulletsInRefill() const;
 	virtual bool areBulletsInRefill() const;
 
 public:
@@ -19,11 +23,6 @@ public:
 	Shooters(const Shooters&);
 	Shooters& operator=(const Shooters&);
 	virtual ~Shooters();
-
-	virtual Shooters* clone() const=0;
-
-	void setRefill(const Refill*);
-	Refill* getRefill() const;
-
+	virtual Shooters* clone() const = 0;
 	virtual void print() const;
 };

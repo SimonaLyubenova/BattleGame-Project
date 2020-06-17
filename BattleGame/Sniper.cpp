@@ -2,8 +2,8 @@
 
 Sniper::Sniper() :Shooters()
 {
-	getRefill()->setNumberStartBullets(10);
-	getRefill()->setNumberCurrentBullets(getRefill()->getNumberStartBullets());
+	setNumberStartBulletsInRefill(10);
+	setNumberCurrentBulletsInRefill(getNumberStartBulletsInRefill());
 	setName("Sniper");
 	setWeaponType(WeaponType::Shooter);
 	setWeight(8.0);
