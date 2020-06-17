@@ -28,7 +28,7 @@ public:
 
 	void heal(Champions& champion)
 	{
-		this->makeHeal(champion);
+		this->increaseHealthTo(champion);
 	}
 
 	virtual void print() const

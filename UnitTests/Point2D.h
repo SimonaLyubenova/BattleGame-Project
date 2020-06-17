@@ -12,25 +12,9 @@ private:
 		this->x = newX;
 	}
 
-	double getX() const
-	{
-		return this->x;
-	}
-
 	void setY(const double newY)
 	{
 		this->y = newY;
-	}
-
-	double getY() const
-	{
-		return this->y;
-	}
-
-protected:
-	virtual double getZ() const
-	{
-		return 0.0;
 	}
 
 public:
@@ -60,6 +44,21 @@ public:
 			setY(newPoint2D.getY());
 		}
 		return *this;
+	}
+
+	double getX() const
+	{
+		return this->x;
+	}
+
+	double getY() const
+	{
+		return this->y;
+	}
+
+	virtual double getZ() const
+	{
+		return 0.0;
 	}
 
 	virtual Point2D* clone() const

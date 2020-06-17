@@ -10,10 +10,7 @@ private:
 	{
 		this->z = newZ;
 	}
-	virtual double getZ() const
-	{
-		return this->z;
-	}
+
 public:
 	Point3D() :Point2D()
 	{
@@ -38,6 +35,11 @@ public:
 			setZ(newPoint3D.getZ());
 		}
 		return *this;
+	}
+
+	virtual double getZ() const
+	{
+		return this->z;
 	}
 
 	virtual Point3D* clone() const
