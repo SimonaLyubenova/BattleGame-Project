@@ -1,11 +1,9 @@
 ﻿#include <iostream>
-#include "Point2D.h"
 #include "Point3D.h"
 #include "Sword.h"
 #include "Sniper.h"
 #include "Gun.h"
 #include "Stick.h"
-#include "Champions.h"
 #include "Human.h"
 #include "Assassin.h"
 #include "Wizard.h"
