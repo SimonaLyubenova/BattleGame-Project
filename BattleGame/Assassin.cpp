@@ -3,7 +3,7 @@
 Assassin::Assassin() :Champions()
 {
 	setName("Unknown assassin");
-	setCategory(Assassins);
+	setCategory(Category::Assassins);
 	setStartHealth(1500);
 	setHealth(getStartHealth());
 	setSpell("Ignite");
@@ -11,7 +11,7 @@ Assassin::Assassin() :Champions()
 
 Assassin::Assassin(const std::string newName, const Point2D& point) :Champions(newName, point)
 {
-	setCategory(Assassins);
+	setCategory(Category::Assassins);
 	setStartHealth(1500);
 	setHealth(getStartHealth());
 	setSpell("Ignite");

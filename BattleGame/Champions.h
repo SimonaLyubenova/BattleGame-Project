@@ -76,30 +76,32 @@ public:
 	Champions& operator=(const Champions&);
 	virtual ~Champions();
 
+	virtual Champions* clone() const = 0;
+
 	//champion's information methods
 	void setName(const std::string);
 	std::string getName() const;
 
-	//champion's actions
+	//view champion's location
+	void printLocation() const;
+
+	//champion's methods in moving and calculating distance
 	double getDistanceTo2D(const Champions&);
 	double getDistanceTo(const Champions&);
 	void moveTo(const Point2D&);
 	void moveTo(const Champions&);
 
-	//weapon methods
+	//champion's methods connected with weapons
 	void takeWeapon(Weapons&);
 	void throwWeapon();
 	void giveWeaponTo(Champions&);
 	void rechargeWeapon();
 	void repairWeapon();
-	void attack(Champions&);
 	void printWeaponInformation() const;
+
+	//champion's attack method
+	void attack(Champions&);
 
 	//print information for champion
 	virtual void print() const;
-
-	//view champion's location
-	void printLocation() const;
-
-	virtual Champions* clone() const = 0;
 };

@@ -10,7 +10,9 @@ static unsigned long countWeapons = 0;
 class Weapons
 {
 private:
+	//abstract class Champions is abled to use all kind of members in abstract class Weapons
 	friend class Champions;
+
 	unsigned long weaponID;
 	std::string name;
 	double weight;
@@ -57,6 +59,5 @@ public:
 	Weapons(const Weapons&);
 	Weapons& operator=(const Weapons&);
 	virtual Weapons* clone() const = 0;
-	
 	virtual void print() const;
 };

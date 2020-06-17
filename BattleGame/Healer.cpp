@@ -3,7 +3,7 @@
 Healer::Healer() :Champions()
 {
 	setName("Unknown healer");
-	setCategory(Healers);
+	setCategory(Category::Healers);
 	setStartHealth(1000);
 	setHealth(getStartHealth());
 	setSpell("Heal");
@@ -11,7 +11,7 @@ Healer::Healer() :Champions()
 
 Healer::Healer(const std::string newName, const Point2D& point) :Champions(newName, point)
 {
-	setCategory(Healers);
+	setCategory(Category::Healers);
 	setStartHealth(1000);
 	setHealth(getStartHealth());
 	setSpell("Heal");

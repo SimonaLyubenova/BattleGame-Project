@@ -3,7 +3,7 @@
 Human::Human() :Champions()
 {
 	setName("Unknown human");
-	setCategory(Humans);
+	setCategory(Category::Humans);
 	setStartHealth(500);
 	setHealth(getStartHealth());
 	setSpell("Barrier");
@@ -11,7 +11,7 @@ Human::Human() :Champions()
 
 Human::Human(const std::string newName, const Point2D& point) :Champions(newName, point)
 {
-	setCategory(Humans);
+	setCategory(Category::Humans);
 	setStartHealth(500);
 	setHealth(getStartHealth());
 	setSpell("Barrier");

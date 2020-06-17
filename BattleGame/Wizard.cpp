@@ -3,7 +3,7 @@
 Wizard::Wizard() :Champions()
 {
 	setName("Unknown wizard");
-	setCategory(Wizards);
+	setCategory(Category::Wizards);
 	setStartHealth(1800);
 	setHealth(getStartHealth());
 	setSpell("Magic");
@@ -11,7 +11,7 @@ Wizard::Wizard() :Champions()
 
 Wizard::Wizard(const std::string newName, const Point2D& point) :Champions(newName, point)
 {
-	setCategory(Wizards);
+	setCategory(Category::Wizards);
 	setStartHealth(1800);
 	setHealth(getStartHealth());
 	setSpell("Magic");

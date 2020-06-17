@@ -351,7 +351,7 @@ bool Champions::hasWeapon() const
 
 bool Champions::isWeaponBroken() const
 {
-	if (getWeaponStatus() == Broken)
+	if (getWeaponStatus() == WeaponStatus::Broken)
 	{
 		return true;
 	}
@@ -360,7 +360,7 @@ bool Champions::isWeaponBroken() const
 
 bool Champions::isWeaponStrong() const
 {
-	if (getWeaponStatus() == Strong)
+	if (getWeaponStatus() == WeaponStatus::Strong)
 	{
 		return true;
 	}
@@ -462,7 +462,7 @@ void Champions::repairWeapon()
 			if (startWeaponDefense != currentWeaponDefense || isWeaponBroken())
 			{
 				setWeaponDefense(startWeaponDefense);
-				setWeaponStatus(Strong);
+				setWeaponStatus(WeaponStatus::Strong);
 			}
 		}
 	}
@@ -476,7 +476,7 @@ void Champions::shoot()
 {
 	try
 	{
-		int currentNumberOfBullets = getWeapon()->getNumberCurrentBulletsInRefill(); //take number of bullets in the refill of the weapon
+		int currentNumberOfBullets = getWeapon()->getNumberCurrentBulletsInRefill();
 		if (currentNumberOfBullets > 0)
 		{
 			currentNumberOfBullets--;
@@ -507,11 +507,11 @@ void Champions::defenseWithWeaponFrom(int& realDamage)
 		setWeaponDefense(currentWeaponDefense);
 		if (isWeaponStrong())
 		{
-			setWeaponStatus(Damaged);
+			setWeaponStatus(WeaponStatus::Damaged);
 		}
 		if (currentWeaponDefense == 0)
 		{
-			setWeaponStatus(Broken);
+			setWeaponStatus(WeaponStatus::Broken);
 		}
 	}
 }
@@ -667,7 +667,7 @@ void Champions::makeWeaponBrokenTo(Champions& champion)
 
 		if (champion.hasWeapon() && !champion.isWeaponBroken())
 		{
-			champion.setWeaponStatus(Broken);
+			champion.setWeaponStatus(WeaponStatus::Broken);
 		}
 	}
 	catch (unsigned long catchedID)

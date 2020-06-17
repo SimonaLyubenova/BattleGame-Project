@@ -24,12 +24,15 @@ int main()
 	Wizard wizard("Fred", point3D);
 	wizard.takeWeapon(stick);
 
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		healer.attack(wizard);
 	}
 
 	wizard.attack(healer);
+
+	wizard.printWeaponInformation();
+	cout << endl;
 
 	wizard.print();
 	cout << endl;

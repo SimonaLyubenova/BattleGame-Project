@@ -5,7 +5,6 @@ class Shooters :public Weapons
 {
 private:
 	Refill* refill = nullptr;
-
 	void setRefill(const Refill*);
 	Refill* getRefill() const;
 
