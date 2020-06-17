@@ -24,7 +24,7 @@ int main()
 	Wizard wizard("Fred", point3D);
 	wizard.takeWeapon(stick);
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		healer.attack(wizard);
 	}

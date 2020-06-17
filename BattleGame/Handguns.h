@@ -9,6 +9,7 @@ private:
 	virtual void setNumberCurrentBulletsInRefill(const int);
 	virtual int getNumberCurrentBulletsInRefill() const;
 	virtual bool areBulletsInRefill() const;
+
 public:
 	Handguns();
 	virtual Handguns* clone() const = 0;

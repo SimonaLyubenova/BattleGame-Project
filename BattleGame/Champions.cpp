@@ -1,5 +1,4 @@
 #include "Champions.h"
-#include <exception>
 
 Champions::Champions()
 {

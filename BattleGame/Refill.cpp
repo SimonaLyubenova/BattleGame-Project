@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Refill.h"
 
 Refill::Refill(const int numberBullets)

@@ -50,8 +50,8 @@ protected:
 	void setStatus(const WeaponStatus);
 	WeaponStatus getStatus() const;
 	bool isShooter() const;
-
 	void printStatus() const;
+
 public:
 	Weapons();
 	Weapons(const Weapons&);
