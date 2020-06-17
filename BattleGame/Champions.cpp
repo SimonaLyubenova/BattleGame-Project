@@ -169,9 +169,21 @@ bool Champions::isInRangeWith(const Champions& champion, const double range)
 {
 	double distance = getDistanceTo(champion);
 
-	if (distance <= range)
+	try
 	{
-		return true;
+		if (distance < 0)
+		{
+			throw std::exception("Range cannot be calculated");
+		}
+
+		if (distance <= range)
+		{
+			return true;
+		}
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "Error in range: " << e.what() << std::endl;
 	}
 	return false;
 }
@@ -264,7 +276,7 @@ double Champions::getDistanceTo2D(const Champions& champion)
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in getting distance2D: Number " << catchedID << " doesn't have location" << std::endl;
+		std::cout << "Error in getting distance2D: Champion number " << catchedID << " doesn't have location" << std::endl;
 	}
 	return -1.0;
 }
@@ -296,7 +308,7 @@ double Champions::getDistanceTo(const Champions& champion)
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in getting distance: Number " << catchedID << " doesn't have location" << std::endl;
+		std::cout << "Error in getting distance: Champion number " << catchedID << " doesn't have location" << std::endl;
 	}
 	return -1.0;
 }
@@ -324,7 +336,7 @@ void Champions::moveTo(const Champions& champion)
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in moving: Number " << catchedID << "doesn't have location" << std::endl;
+		std::cout << "Error in moving: Champion number " << catchedID << "doesn't have location" << std::endl;
 	}
 }
 
@@ -378,7 +390,7 @@ void Champions::takeWeapon(Weapons& weapon)
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in taking weapon: Number " << catchedID << " is not alive" << std::endl;
+		std::cout << "Error in taking weapon: Champion number " << catchedID << " is not alive" << std::endl;
 	}
 }
 
@@ -396,7 +408,7 @@ void Champions::throwWeapon()
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in throwing weapon: Number " << catchedID << " is not alive" << std::endl;
+		std::cout << "Error in throwing weapon: Champion number " << catchedID << " is not alive" << std::endl;
 	}
 }
 
@@ -415,7 +427,7 @@ void Champions::giveWeaponTo(Champions& champion)
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in giving weapon: Number " << catchedID << " is not alive" << std::endl;
+		std::cout << "Error in giving weapon: Champion number " << catchedID << " is not alive" << std::endl;
 	}
 }
 
@@ -433,7 +445,7 @@ void Champions::rechargeWeapon()
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in recharging weapon: Number " << catchedID << " is not alive" << std::endl;
+		std::cout << "Error in recharging weapon: Champion number " << catchedID << " is not alive" << std::endl;
 	}
 }
 
@@ -456,7 +468,7 @@ void Champions::repairWeapon()
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in repairing weapon: Number " << catchedID << " is not alive" << std::endl;
+		std::cout << "Error in repairing weapon: Champion number " << catchedID << " is not alive" << std::endl;
 	}
 }
 
@@ -588,7 +600,7 @@ void Champions::attack(Champions& champion)
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in attacking: Number " << catchedID << " doesn't have location or is not alive" << std::endl;
+		std::cout << "Error in attacking: Champion number " << catchedID << " doesn't have location or is not alive" << std::endl;
 	}
 	catch (std::exception& e)
 	{
@@ -633,7 +645,7 @@ void Champions::increaseHealthTo(Champions& champion)
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in healing: Number " << catchedID << " is not alive" << std::endl;
+		std::cout << "Error in healing: Champion number " << catchedID << " is not alive" << std::endl;
 	}
 	catch (std::exception& e)
 	{
@@ -660,7 +672,7 @@ void Champions::makeWeaponBrokenTo(Champions& champion)
 	}
 	catch (unsigned long catchedID)
 	{
-		std::cout << "Error in breaking weapon: Number " << catchedID << " is not alive" << std::endl;
+		std::cout << "Error in breaking weapon: Champion number " << catchedID << " is not alive" << std::endl;
 	}
 	catch (std::exception& e)
 	{
@@ -723,7 +735,7 @@ void Champions::throwExceptionIfWeaponIsBroken()
 
 void Champions::print() const
 {
-	std::cout << "Number: " << getChampionID() << std::endl;
+	std::cout << "Champion number: " << getChampionID() << std::endl;
 	std::cout << "Name: " << getName() << std::endl;
 	std::cout << "Category: ";
 	switch (getCategory())
@@ -749,12 +761,12 @@ void Champions::printLocation() const
 {
 	if (hasLocation())
 	{
-		std::cout << "Number " << getChampionID() << " coordinates: " << std::endl;
+		std::cout << "Champion number " << getChampionID() << " coordinates: " << std::endl;
 		getLocation()->print();
 	}
 	else
 	{
-		std::cout << "Number " << getChampionID() << " doesn't have coordinates" << std::endl;
+		std::cout << "Champion number " << getChampionID() << " doesn't have coordinates" << std::endl;
 	}
 }
 
@@ -762,11 +774,11 @@ void Champions::printWeaponInformation() const
 {
 	if (hasWeapon())
 	{
-		std::cout << "Weapon of number " << getChampionID() << ":" << std::endl;
+		std::cout << "Weapon of champion number " << getChampionID() << ":" << std::endl;
 		getWeapon()->print();
 	}
 	else
 	{
-		std::cout << "Number " << getChampionID() << " doesn't have a weapon" << std::endl;
+		std::cout << "Champion number " << getChampionID() << " doesn't have a weapon" << std::endl;
 	}
 }

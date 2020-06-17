@@ -46,5 +46,5 @@ int main()
 	cout << endl;
 	healer.printWeaponInformation();
 
-    return 0;
+	return 0;
 }
