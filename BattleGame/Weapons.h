@@ -3,7 +3,6 @@
 #include <string>
 #include "WeaponStatus.h"
 #include "WeaponType.h"
-#include "Refill.h"
 
 static unsigned long countWeapons = 0;
 

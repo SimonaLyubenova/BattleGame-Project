@@ -1,12 +1,6 @@
 #include <iostream>
 #include "Refill.h"
 
-Refill::Refill(const int numberBullets)
-{
-	setNumberCurrentBullets(numberBullets);
-	setNumberStartBullets(numberBullets);
-}
-
 Refill* Refill::clone() const
 {
 	return new Refill(*this);

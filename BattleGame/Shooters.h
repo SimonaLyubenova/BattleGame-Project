@@ -1,5 +1,6 @@
 #pragma once
 #include "Weapons.h"
+#include "Refill.h"
 
 class Shooters :public Weapons
 {
@@ -20,6 +21,7 @@ public:
 	Shooters(const Shooters&);
 	Shooters& operator=(const Shooters&);
 	virtual ~Shooters();
+
 	virtual Shooters* clone() const = 0;
 	virtual void print() const;
 };

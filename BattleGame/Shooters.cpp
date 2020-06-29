@@ -2,7 +2,7 @@
 
 Shooters::Shooters() :Weapons()
 {
-	this->refill = new Refill(10);
+	this->refill = new Refill();
 	setNumberStartBulletsInRefill(10);
 	setName("Unknown shooter");
 	setWeaponType(WeaponType::Shooter);
